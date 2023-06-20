@@ -9,7 +9,7 @@ routes = web.RouteTableDef()
 
 async def json_data(request):
     async with aiofiles.open('main.json', mode='r') as file:
-        print("JSON IS OPEN.")
+        print("Opening JSON")
         read = [json.loads(line) async for line in file]
         data = [
             {
@@ -20,10 +20,10 @@ async def json_data(request):
             for item in read
         ]
         async with aiosqlite.connect('mydb.db') as db:
-            print("Connected to the database.")
+            print("Connected.")
             await db.execute('CREATE TABLE IF NOT EXISTS mydb2 ('
                              'username TEXT, ghlink TEXT, filename TEXT)')
-            print("Table 'mydb2' created.")
+            print("Created.")
             await db.executemany('INSERT INTO mydb2 (username, ghlink, filename) '
                                  'VALUES (:username, :ghlink, :filename)', data)
             print("Data inserted into the table.")
@@ -42,3 +42,4 @@ async def json_data(request):
 app = web.Application()
 app.router.add_routes([web.get('/Json', json_data)])
 web.run_app(app, port=8080)
+#radi
